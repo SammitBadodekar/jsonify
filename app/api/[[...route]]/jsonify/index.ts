@@ -1,6 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-import { ZodTypeAny, z } from "zod";
-import OpenAI from "openai";
+import { z } from "zod";
 import Groq from "groq-sdk";
 import { EXAMPLE_PROMPT, EXAMPLE_ANSWER } from "./example";
 import { jsonSchemaToZod } from "./helpers";

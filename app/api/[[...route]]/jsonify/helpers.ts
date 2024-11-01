@@ -1,6 +1,6 @@
 import { ZodTypeAny, z } from "zod";
 
-export const determineSchemaType = (schema: any): string => {
+export const determineSchemaType = (schema: Record<string, any>): string => {
   if (!schema.hasOwnProperty("type")) {
     if (Array.isArray(schema)) {
       return "array";
@@ -11,7 +11,7 @@ export const determineSchemaType = (schema: any): string => {
   return schema.type;
 };
 
-export const jsonSchemaToZod = (schema: any): ZodTypeAny => {
+export const jsonSchemaToZod = (schema: Record<string, any>): ZodTypeAny => {
   const type = determineSchemaType(schema);
 
   switch (type) {
