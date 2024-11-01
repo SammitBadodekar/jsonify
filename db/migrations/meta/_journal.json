@@ -8,6 +8,27 @@
       "when": 1730262473599,
       "tag": "0000_overjoyed_champions",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1730345509026,
+      "tag": "0001_faithful_ultragirl",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1730346291896,
+      "tag": "0002_clear_jack_power",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1730471972729,
+      "tag": "0003_tiny_steel_serpent",
+      "breakpoints": true
     }
   ]
 }
