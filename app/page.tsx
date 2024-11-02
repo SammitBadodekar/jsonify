@@ -134,9 +134,9 @@ Email: john@example.com
             <div className="space-y-4">
               <h3 className="text-xl font-semibold">About Us</h3>
               <p className="text-gray-300">
-                We're passionate about making data processing and web scraping
+                {`We're passionate about making data processing and web scraping
                 accessible to everyone. Our open-source tool is designed to
-                simplify your workflow and boost productivity.
+                simplify your workflow and boost productivity.`}
               </p>
             </div>
             <div className="space-y-4">
