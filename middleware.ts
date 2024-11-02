@@ -8,6 +8,10 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     const response = NextResponse.next();
     const token = request.cookies.get("session")?.value ?? null;
 
+    if (request.nextUrl.pathname === "/") {
+      return NextResponse.next();
+    }
+
     if (!token && !request.nextUrl.pathname.includes("login")) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
@@ -19,7 +23,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     }
 
     if (session && user && request.nextUrl.pathname.includes("login")) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
   return NextResponse.next();
