@@ -17,7 +17,7 @@ export default function LandingPage() {
     <div className="flex flex-col min-h-screen">
       <Header />
       {/* Hero Section */}
-      <section className="bg-background text-foreground py-20 h-[calc(100vh_-_80px)] flex flex-col justify-center">
+      <section className="bg-background text-foreground py-20 h-[calc(100vh_-_80px)] flex flex-col justify-center px-4">
         <div className="container mx-auto text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-4">
             Transform Any Data or Website into Structured JSON
@@ -47,7 +47,7 @@ export default function LandingPage() {
       </section>
 
       {/* See the Magic in Action Section */}
-      <section className="py-20 bg-muted">
+      <section className="py-20 bg-muted px-8">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">
             See the Magic in Action
@@ -85,7 +85,7 @@ Email: john@example.com
       </section>
 
       {/* Website to JSON Section */}
-      <section className="py-20">
+      <section className="py-20 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">
             From Websites to JSON in Seconds
@@ -128,7 +128,7 @@ Email: john@example.com
       </section>
 
       {/* Footer */}
-      <footer className="bg-black text-white py-16">
+      <footer className="bg-black text-white py-16 px-4">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="space-y-4">

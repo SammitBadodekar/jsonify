@@ -3,8 +3,8 @@
 import * as React from "react";
 import {
   BookOpen,
+  Braces,
   ChartColumnBig,
-  Command,
   Frame,
   KeyRound,
   LifeBuoy,
@@ -28,6 +28,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { TbJson } from "react-icons/tb";
 
 const data = {
   navMain: [
@@ -117,13 +118,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="#">
+              <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
+                  <TbJson className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
+                  <span className="truncate font-semibold">Jsonify</span>
                 </div>
               </Link>
             </SidebarMenuButton>

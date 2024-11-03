@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { getCurrentSession } from "@/lib/session";
 import { SessionProvider } from "@/providers/session-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,7 +32,10 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionProvider value={sessionData}>{children}</SessionProvider>
+        <SessionProvider value={sessionData}>
+          {children}
+          <Toaster />
+        </SessionProvider>
       </body>
     </html>
   );

@@ -23,10 +23,17 @@ export const sessionTable = sqliteTable("session", {
 
 export const apiKeysTable = sqliteTable("api_keys", {
   id: text("id").primaryKey(),
+  name: text("name"),
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id),
   key: text("key").notNull(),
+  createdAt: integer("created_at", {
+    mode: "timestamp",
+  }).notNull(),
+  updatedAt: integer("updated_at", {
+    mode: "timestamp",
+  }).notNull(),
 });
 
 export type User = InferSelectModel<typeof userTable>;

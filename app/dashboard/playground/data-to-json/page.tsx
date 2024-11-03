@@ -120,6 +120,7 @@ export default function DataToJson() {
             <Button
               type="submit"
               className="bg-green-500 hover:bg-green-700 -mt-4"
+              disabled={loading}
             >
               {loading ? (
                 <>

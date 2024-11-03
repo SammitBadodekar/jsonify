@@ -29,6 +29,13 @@
       "when": 1730471972729,
       "tag": "0003_tiny_steel_serpent",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1730626375548,
+      "tag": "0004_yellow_komodo",
+      "breakpoints": true
     }
   ]
 }
