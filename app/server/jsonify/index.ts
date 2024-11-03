@@ -87,7 +87,14 @@ app.post("/", async (c) => {
     }
   );
 
-  return c.json(validationResult, { status: 200 });
+  return c.json(
+    {
+      success: true,
+      message: "Successfully converted data to json",
+      data: validationResult,
+    },
+    { status: 200 }
+  );
 });
 
 export default app;
