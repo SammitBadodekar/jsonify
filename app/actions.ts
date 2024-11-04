@@ -6,6 +6,7 @@ import {
   getCurrentSession,
   invalidateSession,
 } from "@/lib/session";
+import { hashString } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -36,7 +37,7 @@ export async function createApiKey(name: string): Promise<ActionResult> {
   }
 
   const API_KEY = `JFY_${user.googleId}_${uuid()}`;
-  const hashedKey = await hashApiKey(API_KEY);
+  const hashedKey = await hashString(API_KEY);
 
   await db.insert(apiKeysTable).values({
     id: uuid(),
@@ -65,20 +66,4 @@ export async function deleteApiKey(formData: FormData): Promise<void> {
   } catch (error) {
     console.error(error);
   }
-}
-
-async function hashApiKey(apiKey: string) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(apiKey);
-
-  // Hash the API key using SHA-256
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-
-  // Convert the ArrayBuffer to a hexadecimal string for storage
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashedKey = hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-
-  return hashedKey;
 }

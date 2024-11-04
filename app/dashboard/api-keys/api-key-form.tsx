@@ -49,9 +49,7 @@ export default function ApiKeyForm() {
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log("data", data.name);
     const { data: actionData } = await createApiKey(data.name);
-    console.log("data", data);
     ref.current?.reset();
     setApiKey(actionData?.apiKey);
     form.reset();
@@ -66,7 +64,6 @@ export default function ApiKeyForm() {
           setCopied(false);
           ref.current?.reset();
         }
-        console.log("open", open);
         setOpen(open);
       }}
     >

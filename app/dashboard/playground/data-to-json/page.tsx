@@ -19,6 +19,7 @@ import axios from "axios";
 import { useState } from "react";
 import JSONPretty from "react-json-pretty";
 import "react-json-pretty/themes/acai.css";
+import { toast } from "sonner";
 
 const FormSchema = z.object({
   raw_data: z.string().nonempty("Raw data cannot be empty"),
@@ -43,22 +44,53 @@ const FormSchema = z.object({
 export default function DataToJson() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      raw_data:
+        "To open Google Meet on Safari without being prompted to download the app, follow these steps:\nOpen Safari: Launch the Safari browser on your iOS device.\nNavigate to Google Meet: Type meet.google.com in the address bar and hit enter.\nRequest Desktop Site:\nOnce the Google Meet page loads, tap the AA icon located on the left side of the address bar.\nSelect Request Desktop Site from the dropdown menu. This will load the desktop version of Google Meet, which is more functional than the mobile version.\nJoin a Meeting:\nOn the desktop site, you should see options to either start a new meeting or join an existing one.\nIf joining a meeting, enter the meeting code and click Join.\nGrant Permissions: If prompted, allow Safari to access your microphone and camera to participate in the meeting.\nBy following these steps, you should be able to use Google Meet directly in Safari without needing to download any additional apps1\n4.\n",
+      json_schema: JSON.stringify({
+        application: {
+          type: "string",
+        },
+        action: {
+          type: "string",
+        },
+        steps: {
+          type: "array",
+          items: {
+            type: "object",
+            description: {
+              type: "string",
+            },
+            name: {
+              type: "string",
+            },
+            id: {
+              type: "string",
+            },
+          },
+        },
+      }),
+    },
   });
   const [structuredJson, setStructuredJson] = useState<JSON | undefined>();
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      console.log("here in submit", JSON.parse(data.json_schema));
       setLoading(true);
       const Response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/jsonify`,
         {
           data: data.raw_data,
           format: JSON.parse(data.json_schema),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer JFY_109611960223390488813_8ebc0b85-f54a-4081-8c3e-f9e8dfc3283e`,
+          },
         }
       );
-      console.log("here in data", Response?.data);
       if (Response?.data?.success) {
         setStructuredJson(Response?.data?.data);
       }
@@ -66,6 +98,9 @@ export default function DataToJson() {
     } catch (error) {
       console.error(error);
       setLoading(false);
+      toast.error("Something went wrong, please try again", {
+        position: "top-center",
+      });
     }
   }
 
@@ -75,7 +110,7 @@ export default function DataToJson() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4"
       >
-        <div className="flex w-full flex-col gap-4">
+        <div className="flex w-full flex-col gap-12">
           <FormField
             control={form.control}
             name="raw_data"

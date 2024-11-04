@@ -32,7 +32,6 @@ app.post("/", async (c) => {
   const groq = new Groq({ apiKey: GROQ_API_KEY });
 
   const body = await c.req.json();
-  console.log("body", body);
 
   const genericSchema = z.object({
     data: z.string(),
@@ -77,7 +76,6 @@ app.post("/", async (c) => {
         });
 
         const text = res.choices[0].message.content;
-        console.log("text", { text: JSON.parse(text || "") });
         const validationResult = dynamicSchema.parse(JSON.parse(text || ""));
 
         return resolve(validationResult);
