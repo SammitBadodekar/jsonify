@@ -5,7 +5,7 @@ import { getCurrentSession } from "@/lib/session";
 export default async function Header() {
   const { user } = await getCurrentSession();
   return (
-    <header className="flex h-20 w-full items-center justify-center bg-background px-4">
+    <header className="flex h-20 w-full items-center justify-center bg-background px-4 z-10">
       <nav className="flex h-14 w-full max-w-[1200px] items-center justify-between rounded-full bg-background px-4 py-2">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
@@ -38,14 +38,18 @@ export default async function Header() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button className="hidden md:inline-flex" asChild>
+          <Button
+            className="hidden md:inline-flex text-green-700 border-contrast"
+            asChild
+            variant="outline"
+          >
             {user ? (
               <Link href="/dashboard">Go to dashboard</Link>
             ) : (
               <Link href="/login">Get Started</Link>
             )}
           </Button>
-          <Button variant="ghost" className="md:hidden" size="icon">
+          {/* <Button variant="ghost" className="md:hidden" size="icon">
             <span className="sr-only">Open menu</span>
             <svg
               className="h-6 w-6"
@@ -60,7 +64,7 @@ export default async function Header() {
                 d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
-          </Button>
+          </Button> */}
         </div>
       </nav>
     </header>

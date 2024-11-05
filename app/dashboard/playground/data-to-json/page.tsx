@@ -20,6 +20,7 @@ import { useState } from "react";
 import JSONPretty from "react-json-pretty";
 import "react-json-pretty/themes/acai.css";
 import { toast } from "sonner";
+import { useSession } from "@/providers/session-provider";
 
 const FormSchema = z.object({
   raw_data: z.string().nonempty("Raw data cannot be empty"),
@@ -74,6 +75,7 @@ export default function DataToJson() {
   });
   const [structuredJson, setStructuredJson] = useState<JSON | undefined>();
   const [loading, setLoading] = useState(false);
+  const { session, token, user } = useSession();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
@@ -87,7 +89,8 @@ export default function DataToJson() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer JFY_109611960223390488813_8ebc0b85-f54a-4081-8c3e-f9e8dfc3283e`,
+            Authorization: `Bearer JFY_${user?.googleId}`,
+            "X-Session-Token": token,
           },
         }
       );

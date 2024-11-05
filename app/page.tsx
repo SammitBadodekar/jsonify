@@ -1,3 +1,5 @@
+import LandingPageBackground from "@/components/landing-page-background";
+import LandingPageIllustration from "@/components/landing-page-illustration";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Header from "@/components/ui/header";
@@ -14,24 +16,34 @@ import Link from "next/link";
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col items-center min-h-screen">
       <Header />
       {/* Hero Section */}
-      <section className="bg-background text-foreground py-20 h-[calc(100vh_-_80px)] flex flex-col justify-center px-4">
-        <div className="container mx-auto text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">
+      <section className="bg-background text-foreground py-20 h-[calc(100vh_-_80px)] flex flex-col md:flex-row gap-8 justify-center items-center px-4 max-w-[1400px]">
+        <LandingPageBackground />
+        <div className="container mx-auto flex flex-col items-center justify-center w-4/6 z-10 text-center">
+          <h1 className="text-3xl md:text-5xl 2xl:text-6xl font-black mb-4 break-words ">
             Transform Any Data or Website into Structured JSON
           </h1>
-          <p className="text-xl mb-4">
+          <p className="text-md  mb-4 text-center px-6">
             Simplify your data processing with our powerful JSON conversion tool
           </p>
-          <div className="flex justify-center space-x-4">
-            <Button size="lg" asChild>
+          <div className="flex justify-center space-x-4 px-8">
+            <Button
+              asChild
+              className="bg-contrast hover:bg-contrast/90"
+              size="lg"
+            >
               <Link href="/dashboard">
                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button
+              variant="outline"
+              asChild
+              className="text-green-700 border-contrast"
+              size="lg"
+            >
               <Link
                 href="https://github.com/SammitBadodekar/jsonify"
                 target="_blank"
@@ -39,11 +51,12 @@ export default function LandingPage() {
                 className="inline-flex items-center"
               >
                 <Github className="mr-2 h-4 w-4" />
-                Star us on GitHub
+                Star on GitHub
               </Link>
             </Button>
           </div>
         </div>
+        <LandingPageIllustration />
       </section>
 
       {/* See the Magic in Action Section */}

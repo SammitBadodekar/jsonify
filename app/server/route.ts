@@ -5,9 +5,12 @@ import { cors } from "hono/cors";
 import { Redis } from "@upstash/redis/cloudflare";
 import { env } from "hono/adapter";
 import { hashString } from "@/lib/utils";
-import { apiKeysTable } from "@/db/schema";
+import { apiKeysTable, sessionTable, userTable } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/libsql";
+import { getCurrentSession } from "@/lib/session";
+import { encodeHexLowerCase } from "@oslojs/encoding";
+import { sha256 } from "@oslojs/crypto/sha2";
 
 export type Env = {
   GROQ_API_KEY: string;
@@ -31,6 +34,8 @@ app.use(
 app.use(async (c, next) => {
   try {
     const API_KEY = c.req.header("Authorization")?.split(" ")[1];
+    const sessionToken = c.req.header("X-Session-Token");
+
     if (!API_KEY) {
       return c.json(
         { success: false, message: "Missing API key" },
@@ -51,35 +56,63 @@ app.use(async (c, next) => {
       TURSO_AUTH_TOKEN,
       TURSO_CONNECTION_URL,
     } = env(c);
-    const hashedKey = await hashString(API_KEY);
-
     const db = drizzle({
       connection: { url: TURSO_CONNECTION_URL, authToken: TURSO_AUTH_TOKEN },
     });
-
-    const apiKey = await db
-      .select({
-        id: apiKeysTable.id,
-        key: apiKeysTable.key,
-      })
-      .from(apiKeysTable)
-      .where(and(eq(apiKeysTable.key, hashedKey)))
-      .get();
-
-    if (!apiKey) {
-      return c.json(
-        { success: false, message: "Invalid API key" },
-        { status: 401 }
-      );
-    }
-
     const redis = new Redis({
       url: UPSTASH_REDIS_REST_URL,
       token: UPSTASH_REDIS_REST_TOKEN,
     });
-
     const key = `usage:${user_google_id}`;
     const usage: string | null = await redis.get(key);
+
+    if (sessionToken) {
+      const sessionId = encodeHexLowerCase(
+        sha256(new TextEncoder().encode(sessionToken))
+      );
+      const result = await db
+        .select({ user: userTable, session: sessionTable })
+        .from(sessionTable)
+        .innerJoin(userTable, eq(sessionTable.userId, userTable.id))
+        .where(eq(sessionTable.id, sessionId));
+      if (result.length < 1) {
+        return c.json(
+          { success: false, message: "Invalid session token" },
+          { status: 401 }
+        );
+      }
+      const { user, session } = result[0];
+
+      if (!user || !session) {
+        return c.json(
+          { success: false, message: "Invalid session token" },
+          { status: 401 }
+        );
+      }
+    } else {
+      const hashedKey = await hashString(API_KEY);
+
+      const apiKey = await db
+        .select({
+          id: apiKeysTable.id,
+          key: apiKeysTable.key,
+        })
+        .from(apiKeysTable)
+        .where(and(eq(apiKeysTable.key, hashedKey)))
+        .get();
+
+      if (!apiKey) {
+        return c.json(
+          { success: false, message: "Invalid API key" },
+          { status: 401 }
+        );
+      }
+      await db
+        .update(apiKeysTable)
+        .set({ updatedAt: new Date() })
+        .where(eq(apiKeysTable.id, apiKey.id));
+    }
+
     if (usage) {
       const currentUsage = parseInt(usage);
       if (currentUsage >= 100) {
@@ -88,13 +121,7 @@ app.use(async (c, next) => {
           { status: 429 }
         );
       } else {
-        Promise.all([
-          redis.incr(key),
-          db
-            .update(apiKeysTable)
-            .set({ updatedAt: new Date() })
-            .where(eq(apiKeysTable.id, apiKey.id)),
-        ]);
+        redis.incr(key);
       }
     } else {
       await redis.set(key, "1", {

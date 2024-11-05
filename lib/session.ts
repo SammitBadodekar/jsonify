@@ -63,8 +63,8 @@ export async function invalidateSession(sessionId: string): Promise<void> {
 }
 
 export type SessionValidationResult =
-  | { session: Session; user: User }
-  | { session: null; user: null };
+  | { session: Session; user: User; token?: string }
+  | { session: null; user: null; token?: string };
 
 export async function setSessionTokenCookie(
   token: string,
@@ -99,6 +99,6 @@ export const getCurrentSession = cache(
       return { session: null, user: null };
     }
     const result = await validateSessionToken(token);
-    return result;
+    return { ...result, token: token };
   }
 );

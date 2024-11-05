@@ -6,6 +6,7 @@ import {
   Braces,
   ChartColumnBig,
   Frame,
+  Home,
   KeyRound,
   LifeBuoy,
   Map,
@@ -33,9 +34,9 @@ import { TbJson } from "react-icons/tb";
 const data = {
   navMain: [
     {
-      title: "Usage",
+      title: "Home",
       url: "/dashboard",
-      icon: ChartColumnBig,
+      icon: Home,
       hideArrow: true,
       isActive: true,
       items: [],

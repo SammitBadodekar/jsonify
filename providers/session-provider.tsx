@@ -5,6 +5,7 @@ import { createContext, useContext } from "react";
 interface SessionProviderProps {
   user: User | null;
   session: Session | null;
+  token?: string | undefined;
 }
 
 const SessionContext = createContext<SessionProviderProps>(
